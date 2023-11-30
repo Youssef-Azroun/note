@@ -1,0 +1,83 @@
+service: note
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  profile: youssef
+  region: eu-north-1
+  iam:
+    role: arn:aws:iam::742579360444:role/lectures-cloud
+
+plugins:
+  - serverless-webpack
+
+package:
+  individually: true
+
+functions:
+  getNotes:
+    handler: functions/getNotes/index.handler
+    events: 
+      - httpApi:
+          path: '/notes'
+          method: GET
+  postNotes:
+     handler: functions/postNotes/index.handler
+     events: 
+      - httpApi:
+          path: '/notes'
+          method: POST
+  deleteNotes:
+    handler: functions/deleteNotes/index.handler
+    events:
+      - httpApi:
+          path: '/notes'
+          method: DELETE
+  updateNotes:
+    handler: functions/updateNotes/index.handler
+    events:
+      - httpApi:
+          path: '/notes'
+          method: PUT
+  signUp:
+     handler: functions/signUp/index.handler
+     events: 
+      - httpApi:
+          path: '/api/user/signup'
+          method: POST
+  login:
+    handler: functions/login/index.handler
+    events:
+      - httpApi:
+          path: '/api/user/login'
+          method: POST
+
+
+
+
+resources:
+  Resources:
+    notesDb:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: note-db
+        AttributeDefinitions: 
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+    accountsDb:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: notes-accounts
+        AttributeDefinitions: 
+          - AttributeName: username
+            AttributeType: S
+        KeySchema:
+          - AttributeName: username
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
