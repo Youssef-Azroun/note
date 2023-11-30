@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk');
 const { sendResponse } = require('../../responses');
 const db = new AWS.DynamoDB.DocumentClient();
-const middy = require('@middy/core'); // Vi importerar middy
+const middy = require('@middy/core'); 
 const { validateToken } = require('../middleware/auth');
 
 const updateNotes = async(event, context) => {
